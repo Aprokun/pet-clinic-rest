@@ -21,7 +21,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="region" type="bigint">
-                <constraints references="region(code)" foreignKeyName="user_region_fk" />
+                <constraints references="region(code)" nullable="false" foreignKeyName="user_region_fk"/>
             </column>
         </createTable>
         <createTable tableName="pet">
@@ -35,7 +35,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="user_id" type="bigint">
-                <constraints references="user(id)" />
+                <constraints references="user(id)" nullable="false" foreignKeyName="pet_user_fk"/>
             </column>
         </createTable>
         <createTable tableName="clinic">
@@ -66,12 +66,12 @@
                 <constraints nullable="true"/>
             </column>
             <column name="clinic_id" type="bigint">
-                <constraints references="clinic(id)" nullable="false"/>
+                <constraints references="clinic(id)" nullable="false" foreignKeyName="veterinarian_clinic_fk"/>
             </column>
         </createTable>
-        <createTable tableName="services">
+        <createTable tableName="service">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(100)">
                 <constraints nullable="false"/>
@@ -83,28 +83,59 @@
                 <constraints nullable="false"/>
             </column>
             <column name="clinic_id" type="bigint">
-                <constraints references="clinic(id)" nullable="false"/>
+                <constraints references="clinic(id)" nullable="false" foreignKeyName="service_clinic_fk"/>
             </column>
         </createTable>
-        <createTable tableName="reception_history">
+        <createTable tableName="appointment">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(100)">
+            <column name="appointment_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(400)">
+            <column name="appointment_place" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="receipt_date" type="date">
-                <constraints nullable="false"/>
+            <column name="service_id" type="bigint">
+                <constraints references="service(id)" nullable="false" foreignKeyName="appointment_service_fk"/>
             </column>
-            <column name="pet_id" type="bigint">
-                <constraints references="pet(id)" nullable="false"/>
+            <column name="veterinarian_id" type="bigint">
+                <constraints references="veterinarian(id)" nullable="false"
+                             foreignKeyName="appointment_veterinarian_fk"/>
             </column>
         </createTable>
         <createTable tableName="appointment_history">
-            <column name=""></column>
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="appointment_id" type="bigint">
+                <constraints references="appointment(id)" nullable="false"
+                             foreignKeyName="appointment_history_appointment_fk"/>
+            </column>
+            <column name="pet_id" type="bigint">
+                <constraints references="pet(id)" nullable="false" foreignKeyName="appointment_history_pet_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="appointment_request">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="veterinarian_id" type="bigint">
+                <constraints references="veterinarian(id)" nullable="false"
+                             foreignKeyName="appointment_request_veterinarian_fk"/>
+            </column>
+            <column name="clinic_id" type="bigint">
+                <constraints references="clinic(id)" nullable="false" foreignKeyName="appointment_request_clinic_fk"/>
+            </column>
+            <column name="appointment_place" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pet_id" type="bigint">
+                <constraints references="pet(id)" nullable="false" foreignKeyName="appointment_request_pet_fk"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints references="user(id)" nullable="false" foreignKeyName="appointment_request_user_fk"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

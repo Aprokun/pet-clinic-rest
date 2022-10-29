@@ -145,4 +145,11 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="2022-10-30-01-10-00-add-region-column-in-clinic-table" author="Dmitriy">
+        <addColumn tableName="clinic">
+            <column name="region" type="bigint">
+                <constraints references="region(code)" nullable="false" foreignKeyName="clinic_region_fk"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -2,19 +2,15 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="2022-10-28-22-00-00-create-tables" author="Dmitriy">
         <createTable tableName="region">
             <column name="code" type="bigint">
-                <constraints primaryKey="true" />
+                <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(100)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
         </createTable>
         <createTable tableName="user">
@@ -61,14 +57,54 @@
                 <constraints nullable="false" />
             </column>
             <column name="name" type="varchar(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="patronymic" type="varchar(50)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
             <column name="experience" type="int">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
+            <column name="clinic_id" type="bigint">
+                <constraints references="clinic(id)" nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="services">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(400)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cost" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="clinic_id" type="bigint">
+                <constraints references="clinic(id)" nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="reception_history">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(400)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receipt_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pet_id" type="bigint">
+                <constraints references="pet(id)" nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="appointment_history">
+            <column name=""></column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

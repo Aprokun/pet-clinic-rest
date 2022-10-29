@@ -15,7 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -37,7 +37,6 @@ public class UserJ {
     @JoinColumn(name = "region", referencedColumnName = "code")
     private RegionJ region;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JoinColumn
-    private List<PetJ> pets;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<PetJ> pets;
 }

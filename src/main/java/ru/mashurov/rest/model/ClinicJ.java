@@ -7,10 +7,15 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Set;
 
 @Data
 @Entity
@@ -30,4 +35,11 @@ public class ClinicJ {
 
     @Column(nullable = false)
     private String address;
+
+    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+    private Set<ServiceJ> services;
+
+    @OneToOne
+    @JoinColumn(name = "region", referencedColumnName = "code")
+    private RegionJ region;
 }

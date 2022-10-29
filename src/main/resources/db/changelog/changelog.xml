@@ -138,4 +138,11 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-10-30-01-00-00-add-service-reference-in-appointment-request-table" author="Dmitriy">
+        <addColumn tableName="appointment_request">
+            <column name="service_id" type="bigint">
+                <constraints references="service(id)" nullable="false" foreignKeyName="appointment_request_service_fk"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

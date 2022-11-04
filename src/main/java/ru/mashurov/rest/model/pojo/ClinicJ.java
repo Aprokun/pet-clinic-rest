@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model;
+package ru.mashurov.rest.model.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

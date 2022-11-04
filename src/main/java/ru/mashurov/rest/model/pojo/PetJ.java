@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model;
+package ru.mashurov.rest.model.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,8 +26,8 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "user")
-public class UserJ {
+@Table(name = "pet")
+public class PetJ {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,20 +37,20 @@ public class UserJ {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "region", referencedColumnName = "code")
-    private RegionJ region;
+    @Column(nullable = false)
+    private Integer age;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
-    private Set<PetJ> pets;
+    private UserJ user;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserJ userJ = (UserJ) o;
-        return id != null && Objects.equals(id, userJ.id);
+        PetJ petJ = (PetJ) o;
+        return id != null && Objects.equals(id, petJ.id);
     }
 
     @Override

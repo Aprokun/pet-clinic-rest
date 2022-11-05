@@ -36,6 +36,9 @@ public class AppointmentRequestJ {
     private String appointmentPlace;
 
     @OneToOne
+    private ClinicJ clinic;
+
+    @OneToOne
     private ServiceJ service;
 
     @OneToOne

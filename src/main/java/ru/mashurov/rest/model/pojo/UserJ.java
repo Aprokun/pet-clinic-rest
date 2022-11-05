@@ -28,7 +28,7 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "`user`")
 public class UserJ {
 
     @Id

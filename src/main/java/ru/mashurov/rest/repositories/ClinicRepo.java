@@ -7,7 +7,5 @@ import java.util.Set;
 
 public interface ClinicRepo extends CrudRepository<ClinicJ, Long> {
 
-    boolean existsById(final Long id);
-
-    Set<ClinicJ> findAllByRegion(final Long region);
+    Set<ClinicJ> findAllByRegionCode(final Long regionCode);
 }

@@ -6,6 +6,4 @@ import ru.mashurov.rest.model.pojo.UserJ;
 
 @Repository
 public interface UserRepo extends CrudRepository<UserJ, Long> {
-
-
 }

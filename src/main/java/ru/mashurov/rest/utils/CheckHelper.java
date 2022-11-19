@@ -2,7 +2,7 @@ package ru.mashurov.rest.utils;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.mashurov.rest.model.pojo.UserJ;
+import ru.mashurov.rest.model.User;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.UserService;
 
@@ -27,7 +27,7 @@ public class CheckHelper {
         return true;
     }
 
-    public UserJ checkUser(final Long id) {
+    public User checkUser(final Long id) {
 
         if (!userService.existById(id)) {
 

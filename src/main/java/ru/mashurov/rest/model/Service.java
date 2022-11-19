@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model.pojo;
+package ru.mashurov.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,11 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -28,8 +26,8 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "clinic")
-public class ClinicJ {
+@Table(name = "service")
+public class Service {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,22 +38,22 @@ public class ClinicJ {
     private String name;
 
     @Column(nullable = false)
-    private String address;
+    private String description;
 
-    @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+    @Column(nullable = false)
+    private Integer cost;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "clinic_id", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
-    private Set<ServiceJ> services;
-
-    @OneToOne
-    @JoinColumn(name = "region", referencedColumnName = "code")
-    private RegionJ region;
+    private Clinic clinic;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ClinicJ clinicJ = (ClinicJ) o;
-        return id != null && Objects.equals(id, clinicJ.id);
+        Service service = (Service) o;
+        return id != null && Objects.equals(id, service.id);
     }
 
     @Override

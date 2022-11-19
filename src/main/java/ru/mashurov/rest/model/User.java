@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model.pojo;
+package ru.mashurov.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Set;
@@ -28,8 +28,8 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "veterinarian")
-public class VeterinarianJ {
+@Table(name = "`user`")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,31 +37,28 @@ public class VeterinarianJ {
     private Long id;
 
     @Column(nullable = false)
-    private String surname;
-
-    @Column(nullable = false)
     private String name;
 
-    @Column
-    private String patronymic;
+    @OneToOne
+    @JoinColumn(name = "region", referencedColumnName = "code")
+    private Region region;
 
-    @Column
-    private Integer experience;
-
-    @ManyToOne
-    @JoinColumn(name = "clinic_id", nullable = false)
-    private ClinicJ clinic;
-
-    @OneToMany(mappedBy = "veterinarian", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<AppointmentJ> appointments;
+    private Set<Pet> pets;
+
+    @Column(nullable = false)
+    private Long telegramId;
+
+    @Column(nullable = false)
+    private String username;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        VeterinarianJ that = (VeterinarianJ) o;
-        return id != null && Objects.equals(id, that.id);
+        User user = (User) o;
+        return id != null && Objects.equals(id, user.id);
     }
 
     @Override

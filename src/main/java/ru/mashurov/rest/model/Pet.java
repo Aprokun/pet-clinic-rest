@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model.pojo;
+package ru.mashurov.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.util.Date;
 import java.util.Objects;
 
 @Getter
@@ -30,8 +26,8 @@ import java.util.Objects;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "appointment")
-public class AppointmentJ {
+@Table(name = "pet")
+public class Pet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,26 +35,22 @@ public class AppointmentJ {
     private Long id;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date appointmentDate;
+    private String name;
 
     @Column(nullable = false)
-    private String appointmentPlace;
+    private Integer age;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "veterinarian_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
-    private VeterinarianJ veterinarian;
-
-    @OneToOne
-    private ServiceJ service;
+    private User user;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AppointmentJ that = (AppointmentJ) o;
-        return id != null && Objects.equals(id, that.id);
+        Pet pet = (Pet) o;
+        return id != null && Objects.equals(id, pet.id);
     }
 
     @Override

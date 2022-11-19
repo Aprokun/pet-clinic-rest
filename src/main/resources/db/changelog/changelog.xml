@@ -152,4 +152,10 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="2022-11-16-18-30-00-add-telegram-id-column" author="Dmitriy">
+        <addColumn tableName="user">
+            <column name="telegram_id" type="bigint"/>
+            <column name="username" type="varchar(50)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

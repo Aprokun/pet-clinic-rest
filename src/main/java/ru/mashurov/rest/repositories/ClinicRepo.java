@@ -1,11 +1,11 @@
 package ru.mashurov.rest.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import ru.mashurov.rest.model.pojo.ClinicJ;
+import ru.mashurov.rest.model.Clinic;
 
 import java.util.Set;
 
-public interface ClinicRepo extends CrudRepository<ClinicJ, Long> {
+public interface ClinicRepo extends CrudRepository<Clinic, Long> {
 
-    Set<ClinicJ> findAllByRegionCode(final Long regionCode);
+    Set<Clinic> findAllByRegionCode(final Long regionCode);
 }

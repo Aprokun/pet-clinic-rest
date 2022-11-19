@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model.pojo;
+package ru.mashurov.rest.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @Table(name = "appointment_request")
-public class AppointmentRequestJ {
+public class AppointmentRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,25 +36,25 @@ public class AppointmentRequestJ {
     private String appointmentPlace;
 
     @OneToOne
-    private ClinicJ clinic;
+    private Clinic clinic;
 
     @OneToOne
-    private ServiceJ service;
+    private Service service;
 
     @OneToOne
-    private VeterinarianJ veterinarian;
+    private Veterinarian veterinarian;
 
     @OneToOne
-    private PetJ pet;
+    private Pet pet;
 
     @OneToOne
-    private UserJ user;
+    private User user;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        AppointmentRequestJ that = (AppointmentRequestJ) o;
+        AppointmentRequest that = (AppointmentRequest) o;
         return id != null && Objects.equals(id, that.id);
     }
 

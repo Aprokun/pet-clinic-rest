@@ -2,7 +2,7 @@ package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mashurov.rest.model.pojo.VeterinarianJ;
+import ru.mashurov.rest.model.Veterinarian;
 import ru.mashurov.rest.repositories.VeterinarianRepo;
 
 import java.util.Set;
@@ -17,11 +17,11 @@ public class VeterinarianService {
 
     private final ClinicService clinicService;
 
-    public Set<VeterinarianJ> findAllByClinicId(final Long clinicId) {
+    public Set<Veterinarian> findAllByClinicId(final Long clinicId) {
         return veterinarianRepo.findAllByClinicId(clinicId);
     }
 
-    public VeterinarianJ findById(final Long id) {
+    public Veterinarian findById(final Long id) {
 
         if (!veterinarianRepo.existsById(id)) {
 

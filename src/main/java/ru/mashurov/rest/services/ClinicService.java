@@ -2,7 +2,7 @@ package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mashurov.rest.model.pojo.ClinicJ;
+import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.repositories.ClinicRepo;
 
 import static ru.mashurov.rest.utils.ErrorMessages.CLINIC_NOT_EXIST;
@@ -18,7 +18,7 @@ public class ClinicService {
         return clinicRepo.existsById(id);
     }
 
-    public ClinicJ findById(final Long id) {
+    public Clinic findById(final Long id) {
 
         if (!existById(id)) {
 

@@ -2,7 +2,7 @@ package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mashurov.rest.model.pojo.AppointmentJ;
+import ru.mashurov.rest.model.Appointment;
 import ru.mashurov.rest.repositories.AppointmentRepo;
 
 import java.util.Set;
@@ -17,7 +17,7 @@ public class AppointmentService {
 
     private final PetService petService;
 
-    public Set<AppointmentJ> findAppointmentHistoryByPetId(final Long petId) {
+    public Set<Appointment> findAppointmentHistoryByPetId(final Long petId) {
 
         if (petService.existById(petId)) {
 

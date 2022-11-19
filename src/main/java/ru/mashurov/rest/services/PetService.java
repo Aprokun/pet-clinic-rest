@@ -2,7 +2,7 @@ package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.mashurov.rest.model.pojo.PetJ;
+import ru.mashurov.rest.model.Pet;
 import ru.mashurov.rest.repositories.PetRepo;
 
 import java.util.Set;
@@ -21,7 +21,7 @@ public class PetService {
         return petRepo.existsById(id);
     }
 
-    public Set<PetJ> findAllByUserId(final Long userId) {
+    public Set<Pet> findAllByUserId(final Long userId) {
 
         if (userService.existById(userId)) {
 

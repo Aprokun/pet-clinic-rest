@@ -1,4 +1,4 @@
-package ru.mashurov.rest.model.dto;
+package ru.mashurov.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

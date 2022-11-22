@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.User;
 import ru.mashurov.rest.repositories.UserRepo;
 
+import java.util.Optional;
+
 import static ru.mashurov.rest.utils.ErrorMessages.USER_NOT_REGISTERED;
 
 @Service
@@ -27,12 +29,24 @@ public class UserService {
         }
     }
 
-    public Boolean existById(final Long id) {
+    public Boolean existByUserId(final Long id) {
         return userRepo.existsById(id);
     }
 
-    public User findById(final Long id) {
+    public User findByUserId(final Long id) {
         return userRepo.findById(id).get();
+    }
+
+    public User findByTelegramId(final Long telegramId) {
+
+        final Optional<User> user = userRepo.findByTelegramId(telegramId);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            //TODO 400
+            throw new RuntimeException("Пользователя с данным telegramId не существует");
+        }
     }
 
     public Boolean existByTelegramId(final Long telegramId) {

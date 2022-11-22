@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.repositories.ClinicRepo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ru.mashurov.rest.utils.ErrorMessages.CLINIC_NOT_EXIST;
 
 @Service
@@ -16,6 +19,10 @@ public class ClinicService {
     public boolean existById(final Long id) {
 
         return clinicRepo.existsById(id);
+    }
+
+    public List<Clinic> findAllByRegionCode(final Long regionCode) {
+        return new ArrayList<>(clinicRepo.findAllByRegionCode(regionCode));
     }
 
     public Clinic findById(final Long id) {

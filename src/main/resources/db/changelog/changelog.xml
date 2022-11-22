@@ -158,4 +158,11 @@
             <column name="username" type="varchar(50)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="2022-11-22-19-30-00-add-pet-gender-column" author="Dmitriy">
+        <addColumn tableName="pet">
+            <column name="gender" type="varchar(10)" defaultOnNull="true" defaultValue="n">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

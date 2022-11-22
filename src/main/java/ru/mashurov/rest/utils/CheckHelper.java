@@ -29,12 +29,12 @@ public class CheckHelper {
 
     public User checkUser(final Long id) {
 
-        if (!userService.existById(id)) {
+        if (!userService.existByUserId(id)) {
 
             //TODO 404
             throw new RuntimeException(USER_NOT_REGISTERED);
         }
 
-        return userService.findById(id);
+        return userService.findByUserId(id);
     }
 }

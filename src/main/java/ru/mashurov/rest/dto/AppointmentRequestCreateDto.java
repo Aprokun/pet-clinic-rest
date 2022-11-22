@@ -20,4 +20,6 @@ public class AppointmentRequestCreateDto {
     private Long petId;
 
     private Long serviceId;
+
+    private Long userId;
 }

@@ -1,5 +1,6 @@
 package ru.mashurov.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "veterinarian_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference
     @ToString.Exclude
     private Veterinarian veterinarian;
 

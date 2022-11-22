@@ -1,5 +1,6 @@
 package ru.mashurov.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +44,7 @@ public class Clinic {
     private String address;
 
     @OneToMany(mappedBy = "clinic", fetch = FetchType.LAZY)
+    @JsonManagedReference
     @ToString.Exclude
     private Set<Service> services;
 

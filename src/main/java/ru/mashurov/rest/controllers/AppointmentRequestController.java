@@ -3,7 +3,6 @@ package ru.mashurov.rest.controllers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,27 +32,29 @@ public class AppointmentRequestController {
     private final VeterinarianService veterinarianService;
     private final ClinicService clinicService;
 
-    @PostMapping("/v1/users/{id}/requests/create")
+    @PostMapping("/appointments/create")
     public ResponseEntity<AppointmentRequest> create(
-            @PathVariable final Long id,
             @RequestBody final AppointmentRequestCreateDto dto
     ) {
 
+        final User user = checkHelper.checkUser(dto.getUserId());
 
-        final User user = checkHelper.checkUser(id);
         final Pet userPet = user
                 .getPets()
                 .stream()
                 .filter(pet -> Objects.equals(pet.getId(), dto.getPetId()))
                 .findFirst()
                 .get();
+
         final Clinic clinic = clinicService.findById(dto.getClinicId());
+
         final Service clinicService = clinic
                 .getServices()
                 .stream()
                 .filter(service -> Objects.equals(service.getId(), dto.getServiceId()))
                 .findFirst()
                 .get();
+
         final Veterinarian veterinarian = veterinarianService.findById(dto.getVeterinarianId());
 
         final AppointmentRequest appointmentRequest = new AppointmentRequest(

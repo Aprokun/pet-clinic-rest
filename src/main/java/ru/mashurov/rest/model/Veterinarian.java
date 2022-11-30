@@ -54,7 +54,7 @@ public class Veterinarian {
     private Clinic clinic;
 
     @OneToMany(mappedBy = "veterinarian", fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference("veterinarian-value")
     @ToString.Exclude
     private Set<Appointment> appointments;
 

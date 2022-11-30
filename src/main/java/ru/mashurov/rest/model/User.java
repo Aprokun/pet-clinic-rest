@@ -45,7 +45,7 @@ public class User {
     @JoinColumn(name = "region", referencedColumnName = "code")
     private Region region;
 
-    @JsonManagedReference
+    @JsonManagedReference("pets-value")
     @OneToMany(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Pet> pets;

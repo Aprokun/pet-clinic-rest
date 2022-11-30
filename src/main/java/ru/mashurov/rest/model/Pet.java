@@ -1,6 +1,7 @@
 package ru.mashurov.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +18,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,7 +46,7 @@ public class Pet {
 	@Column(nullable = false)
 	private Integer age;
 
-	@JsonBackReference
+	@JsonBackReference("pets-value")
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	@JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
 	@ToString.Exclude
@@ -50,6 +54,15 @@ public class Pet {
 
 	@Column(nullable = false)
 	private String gender;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "appointment_history",
+			joinColumns = @JoinColumn(name = "appointment_id"),
+			inverseJoinColumns = @JoinColumn(name = "pet_id")
+	)
+	@JsonManagedReference("appointments-value")
+	private Set<Appointment> appointments;
 
 	@Override
 	public boolean equals(Object o) {

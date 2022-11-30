@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.AppointmentRequestCreateDto;
 import ru.mashurov.rest.model.AppointmentRequest;
+import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Pet;
 import ru.mashurov.rest.model.Service;
 import ru.mashurov.rest.model.User;
 import ru.mashurov.rest.model.Veterinarian;
 import ru.mashurov.rest.services.AppointmentRequestService;
+import ru.mashurov.rest.services.AppointmentRequestStatusService;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 import ru.mashurov.rest.utils.CheckHelper;
@@ -31,6 +33,7 @@ public class AppointmentRequestController {
     private final CheckHelper checkHelper;
     private final VeterinarianService veterinarianService;
     private final ClinicService clinicService;
+    private final AppointmentRequestStatusService appointmentRequestStatusService;
 
     @PostMapping("/appointments/create")
     public ResponseEntity<AppointmentRequest> create(
@@ -57,8 +60,10 @@ public class AppointmentRequestController {
 
         final Veterinarian veterinarian = veterinarianService.findById(dto.getVeterinarianId());
 
+        final AppointmentRequestStatus status = appointmentRequestStatusService.findBySysname("unhandled");
+
         final AppointmentRequest appointmentRequest = new AppointmentRequest(
-                null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user
+                null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user, status
         );
 
         return ResponseEntity.ok(appointmentRequestService.create(appointmentRequest));

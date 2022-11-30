@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
@@ -49,6 +50,10 @@ public class AppointmentRequest {
 
     @OneToOne
     private User user;
+
+    @OneToOne
+    @JoinColumn(name = "status", referencedColumnName = "id")
+    private AppointmentRequestStatus status;
 
     @Override
     public boolean equals(Object o) {

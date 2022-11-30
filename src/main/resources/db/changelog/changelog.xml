@@ -165,4 +165,43 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="2022-11-27-21-40-00-add-appointment-request-statuses" author="Dmitriy">
+        <createTable tableName="appointment_request_statuses">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sysname" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="unhandled"/>
+            <column name="name" value="Не обработано"/>
+        </insert>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="handled"/>
+            <column name="name" value="Обработано"/>
+        </insert>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="rejected"/>
+            <column name="name" value="Отклонено"/>
+        </insert>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="canceled"/>
+            <column name="name" value="Отменено"/>
+        </insert>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="accept"/>
+            <column name="name" value="Принято"/>
+        </insert>
+        <addColumn tableName="appointment_request">
+            <column name="status" type="bigint" defaultValue="1">
+                <constraints references="appointment_request_statuses(id)" nullable="false"
+                             foreignKeyName="appointment_request_status_fk"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

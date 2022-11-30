@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -48,12 +49,21 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "veterinarian_id", referencedColumnName = "id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("veterinarian-value")
     @ToString.Exclude
     private Veterinarian veterinarian;
 
     @OneToOne
     private Service service;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "appointment_history",
+            joinColumns = @JoinColumn(name = "pet_id"),
+            inverseJoinColumns = @JoinColumn(name = "appointment_id")
+    )
+    @JsonBackReference("appointments-value")
+    private Pet pet;
 
     @Override
     public boolean equals(Object o) {

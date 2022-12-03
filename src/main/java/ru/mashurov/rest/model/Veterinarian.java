@@ -70,4 +70,8 @@ public class Veterinarian {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public String getSNP() {
+        return String.format("%s %s %s", surname, name, patronymic);
+    }
 }

@@ -3,11 +3,16 @@ package ru.mashurov.rest.controllers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.AppointmentRequestCreateDto;
+import ru.mashurov.rest.dto.AppointmentRequestDto;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.model.Clinic;
@@ -21,7 +26,9 @@ import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 import ru.mashurov.rest.utils.CheckHelper;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -67,5 +74,27 @@ public class AppointmentRequestController {
         );
 
         return ResponseEntity.ok(appointmentRequestService.create(appointmentRequest));
+    }
+
+    @GetMapping("/appointments")
+    public ResponseEntity<List<AppointmentRequestDto>> getAll(@RequestParam final Long id) {
+
+        final List<AppointmentRequestDto> appointmentRequests = appointmentRequestService
+                .findAllByUserId(id)
+                .stream().map(req -> new AppointmentRequestDto(
+                        req.getId(), req.getClinic().getName(), req.getVeterinarian().getSNP(),
+                        req.getAppointmentPlace(), req.getPet().getName(), req.getService().getName()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(appointmentRequests);
+    }
+
+    @DeleteMapping("/appointments/{id}/remove")
+    public ResponseEntity<Void> remove(@PathVariable final Long id) {
+
+        appointmentRequestService.remove(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

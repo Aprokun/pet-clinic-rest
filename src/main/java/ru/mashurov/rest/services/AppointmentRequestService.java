@@ -1,6 +1,8 @@
 package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
@@ -24,5 +26,9 @@ public class AppointmentRequestService {
 
 	public void remove(final Long id) {
 		appointmentRequestRepo.deleteById(id);
+	}
+
+	public Page<AppointmentRequest> findAllByClinicId(final Long clinicId, final Pageable pageable) {
+		return appointmentRequestRepo.findAllByClinicId(clinicId, pageable);
 	}
 }

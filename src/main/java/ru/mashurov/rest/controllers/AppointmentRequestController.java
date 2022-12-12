@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.AppointmentRequestCreateDto;
 import ru.mashurov.rest.dto.AppointmentRequestDto;
@@ -67,27 +66,27 @@ public class AppointmentRequestController {
 
         final Veterinarian veterinarian = veterinarianService.findById(dto.getVeterinarianId());
 
-        final AppointmentRequestStatus status = appointmentRequestStatusService.findBySysname("unhandled");
+	    final AppointmentRequestStatus status = appointmentRequestStatusService.findBySysname("unhandled");
 
-        final AppointmentRequest appointmentRequest = new AppointmentRequest(
-                null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user, status
-        );
+	    final AppointmentRequest appointmentRequest = new AppointmentRequest(
+			    null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user, status
+	    );
 
-        return ResponseEntity.ok(appointmentRequestService.create(appointmentRequest));
+	    return ResponseEntity.ok(appointmentRequestService.create(appointmentRequest));
     }
 
-    @GetMapping("/appointments")
-    public ResponseEntity<List<AppointmentRequestDto>> getAll(@RequestParam final Long id) {
+	@GetMapping("/user/{userId}/appointments")
+	public ResponseEntity<List<AppointmentRequestDto>> findAll(@PathVariable final Long userId) {
 
-        final List<AppointmentRequestDto> appointmentRequests = appointmentRequestService
-                .findAllByUserId(id)
-                .stream().map(req -> new AppointmentRequestDto(
-                        req.getId(), req.getClinic().getName(), req.getVeterinarian().getSNP(),
-                        req.getAppointmentPlace(), req.getPet().getName(), req.getService().getName()
-                ))
-                .collect(Collectors.toList());
+		final List<AppointmentRequestDto> appointmentRequests = appointmentRequestService
+				.findAllByUserId(userId)
+				.stream().map(req -> new AppointmentRequestDto(
+						req.getId(), req.getClinic().getName(), req.getVeterinarian().getSNP(),
+						req.getAppointmentPlace(), req.getPet().getName(), req.getService().getName()
+				))
+				.collect(Collectors.toList());
 
-        return ResponseEntity.ok(appointmentRequests);
+		return ResponseEntity.ok(appointmentRequests);
     }
 
     @DeleteMapping("/appointments/{id}/remove")

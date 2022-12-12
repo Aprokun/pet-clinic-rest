@@ -23,4 +23,15 @@ public class AdminService {
 			throw new RuntimeException();
 		}
 	}
+
+	public Admin findById(final Long id) {
+
+		final Optional<Admin> optionalAdmin = adminRepo.findById(id);
+
+		if (optionalAdmin.isPresent()) {
+			return optionalAdmin.get();
+		} else {
+			throw new RuntimeException("Админ с id=" + id + " не найден");
+		}
+	}
 }

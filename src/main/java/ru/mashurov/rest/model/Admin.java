@@ -16,9 +16,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -45,13 +47,13 @@ public class Admin {
 	@JoinColumn(name = "clinic", referencedColumnName = "id")
 	private Clinic clinic;
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "admins_roles",
 			joinColumns = @JoinColumn(name = "admin_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
-	private Role role;
+	private Set<Role> roles;
 
 	@Override
 	public boolean equals(Object o) {

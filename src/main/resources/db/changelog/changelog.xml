@@ -247,4 +247,14 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-12-10-15-00-00-update-role-names" author="Dmitriy">
+        <update tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+            <where>name='ADMIN'</where>
+        </update>
+        <update tableName="roles">
+            <column name="name" value="ROLE_MAJOR"/>
+            <where>name='MAJOR'</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>

@@ -20,7 +20,6 @@ public class AdminController {
 
 	@GetMapping("/admins")
 	public ResponseEntity<Admin> getAdmin(@RequestParam(name = "username") final String login) {
-		final Admin byLogin = adminService.findByLogin(login);
-		return ResponseEntity.ok(byLogin);
+		return ResponseEntity.ok(adminService.findByLogin(login));
 	}
 }

@@ -9,6 +9,7 @@ import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class AppointmentRequestService {
 
 	private final AppointmentRequestRepo appointmentRequestRepo;
 
-	public AppointmentRequest create(final AppointmentRequest appointmentRequest) {
+	public AppointmentRequest createOrUpdate(final AppointmentRequest appointmentRequest) {
 		return appointmentRequestRepo.save(appointmentRequest);
 	}
 
@@ -30,5 +31,16 @@ public class AppointmentRequestService {
 
 	public Page<AppointmentRequest> findAllByClinicId(final Long clinicId, final Pageable pageable) {
 		return appointmentRequestRepo.findAllByClinicId(clinicId, pageable);
+	}
+
+	public AppointmentRequest findById(final Long requestId) {
+
+		final Optional<AppointmentRequest> optionalAppointmentRequest = appointmentRequestRepo.findById(requestId);
+
+		if (optionalAppointmentRequest.isPresent()) {
+			return optionalAppointmentRequest.get();
+		} else {
+			throw new RuntimeException("Нет заявления с id - " + requestId);
+		}
 	}
 }

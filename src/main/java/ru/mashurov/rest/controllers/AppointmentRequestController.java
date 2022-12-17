@@ -72,7 +72,7 @@ public class AppointmentRequestController {
 			    null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user, status
 	    );
 
-	    return ResponseEntity.ok(appointmentRequestService.create(appointmentRequest));
+	    return ResponseEntity.ok(appointmentRequestService.createOrUpdate(appointmentRequest));
     }
 
 	@GetMapping("/user/{userId}/appointments")

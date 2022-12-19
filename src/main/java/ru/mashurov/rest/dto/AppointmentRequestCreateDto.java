@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,8 @@ public class AppointmentRequestCreateDto {
     private Long clinicId;
 
     private String appointmentPlace;
+
+    private LocalDateTime date;
 
     private Long petId;
 

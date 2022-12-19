@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +20,8 @@ public class AppointmentRequestService {
 		return appointmentRequestRepo.save(appointmentRequest);
 	}
 
-	public List<AppointmentRequest> findAllByUserId(final Long userId) {
-		return new ArrayList<>(appointmentRequestRepo.findAllByUserId(userId));
+	public Page<AppointmentRequest> findAllByUserId(final Long userId, final Pageable pageable) {
+		return appointmentRequestRepo.findAllByUserId(userId, pageable);
 	}
 
 	public void remove(final Long id) {
@@ -42,5 +41,12 @@ public class AppointmentRequestService {
 		} else {
 			throw new RuntimeException("Нет заявления с id - " + requestId);
 		}
+	}
+
+	public Page<AppointmentRequest> findAllByStatusSysnamesAndClinicId(
+			final List<String> statusSysnames, final Long clinicId, final Pageable pageable
+	) {
+
+		return appointmentRequestRepo.findAllByStatusSysnameInAndClinicId(statusSysnames, clinicId, pageable);
 	}
 }

@@ -7,8 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import ru.mashurov.rest.dto.AppointmentRequestAdminDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ru.mashurov.rest.dto.MajorAppointmentRequestDto;
 import ru.mashurov.rest.model.Admin;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.model.AppointmentRequestStatus;
@@ -16,6 +21,10 @@ import ru.mashurov.rest.services.AdminService;
 import ru.mashurov.rest.services.AppointmentRequestService;
 import ru.mashurov.rest.services.AppointmentRequestStatusService;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import static ru.mashurov.rest.values.AppointmentRequestPlaces.CLINIC;
 import static ru.mashurov.rest.values.AppointmentRequestStatusValues.ACCEPT;
 import static ru.mashurov.rest.values.AppointmentRequestStatusValues.REJECTED;
 
@@ -32,20 +41,22 @@ public class AppointmentRequestMajorController {
 	private final AdminService adminService;
 
 	@GetMapping("/{majorId}/appointments")
-	public ResponseEntity<Page<AppointmentRequestAdminDto>> findAll(
+	public ResponseEntity<Page<MajorAppointmentRequestDto>> findAll(
 			@PathVariable final Long majorId,
+			@RequestParam final List<String> statuses,
 			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) final Pageable pageable
 	) {
 
 		final Admin admin = adminService.findById(majorId);
 
-		final Page<AppointmentRequestAdminDto> pageAppointmentRequests = appointmentRequestService
-				.findAllByClinicId(admin.getClinic().getId(), pageable)
-				.map(appointmentRequest -> new AppointmentRequestAdminDto(
-						appointmentRequest.getId(), appointmentRequest.getVeterinarian().getSNP(),
-						appointmentRequest.getAppointmentPlace(), appointmentRequest.getPet().getName(),
-						appointmentRequest.getService().getName())
-				);
+		final Page<MajorAppointmentRequestDto> pageAppointmentRequests = appointmentRequestService
+				.findAllByStatusSysnamesAndClinicId(statuses, admin.getClinic().getId(), pageable)
+				.map(req -> new MajorAppointmentRequestDto(
+						req.getId(), req.getVeterinarian().getSNP(),
+						req.getAppointmentPlace().equals(CLINIC) ? "В клинике" : "На дому",
+						req.getPet().getName(), req.getService().getName(), req.getStatus().getName(),
+						req.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm"))
+				));
 
 		return ResponseEntity.ok(pageAppointmentRequests);
 	}
@@ -64,7 +75,7 @@ public class AppointmentRequestMajorController {
 	}
 
 	@PostMapping("/requests/{requestId}/reject")
-	public ResponseEntity<Void> rejectRequestByMajor	(@PathVariable final Long requestId) {
+	public ResponseEntity<Void> rejectRequestByMajor(@PathVariable final Long requestId) {
 
 		final AppointmentRequest appointmentRequest = appointmentRequestService.findById(requestId);
 

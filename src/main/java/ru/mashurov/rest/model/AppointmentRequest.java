@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -28,22 +30,26 @@ import java.util.Objects;
 @Table(name = "appointment_request")
 public class AppointmentRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false)
+	private Long id;
 
-    @Column(nullable = false)
-    private String appointmentPlace;
+	@Column(nullable = false)
+	private String appointmentPlace;
 
-    @OneToOne
-    private Clinic clinic;
+	@Column(nullable = false)
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	private LocalDateTime date;
 
-    @OneToOne
-    private Service service;
+	@OneToOne
+	private Clinic clinic;
 
-    @OneToOne
-    private Veterinarian veterinarian;
+	@OneToOne
+	private Service service;
+
+	@OneToOne
+	private Veterinarian veterinarian;
 
     @OneToOne
     private Pet pet;

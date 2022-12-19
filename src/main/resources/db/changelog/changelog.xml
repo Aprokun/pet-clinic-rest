@@ -257,4 +257,11 @@
             <where>name='MAJOR'</where>
         </update>
     </changeSet>
+    <changeSet id="2022-12-18-01-50-00-add-appoinment-request-date" author="Dmitriy">
+        <addColumn tableName="appointment_request">
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

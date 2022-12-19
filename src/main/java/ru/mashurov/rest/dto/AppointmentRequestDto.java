@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,7 +15,6 @@ public class AppointmentRequestDto {
 
 	private Long id;
 
-	private String clinicName;
 
 	private String veterinarianName;
 
@@ -22,4 +23,6 @@ public class AppointmentRequestDto {
 	private String petName;
 
 	private String serviceName;
+
+	private LocalDateTime date;
 }

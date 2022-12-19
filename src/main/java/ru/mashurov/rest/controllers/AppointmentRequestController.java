@@ -2,6 +2,10 @@ package ru.mashurov.rest.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.AppointmentRequestCreateDto;
-import ru.mashurov.rest.dto.AppointmentRequestDto;
+import ru.mashurov.rest.dto.UserAppointmentRequestDto;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.model.Clinic;
@@ -25,9 +29,7 @@ import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 import ru.mashurov.rest.utils.CheckHelper;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -41,19 +43,17 @@ public class AppointmentRequestController {
     private final ClinicService clinicService;
     private final AppointmentRequestStatusService appointmentRequestStatusService;
 
-    @PostMapping("/appointments/create")
-    public ResponseEntity<AppointmentRequest> create(
-            @RequestBody final AppointmentRequestCreateDto dto
-    ) {
+	@PostMapping("/appointments/create")
+	public ResponseEntity<AppointmentRequest> create(@RequestBody final AppointmentRequestCreateDto dto) {
 
-        final User user = checkHelper.checkUser(dto.getUserId());
+		final User user = checkHelper.checkUser(dto.getUserId());
 
-        final Pet userPet = user
-                .getPets()
-                .stream()
-                .filter(pet -> Objects.equals(pet.getId(), dto.getPetId()))
-                .findFirst()
-                .get();
+		final Pet userPet = user
+				.getPets()
+				.stream()
+				.filter(pet -> Objects.equals(pet.getId(), dto.getPetId()))
+				.findFirst()
+				.get();
 
         final Clinic clinic = clinicService.findById(dto.getClinicId());
 
@@ -69,25 +69,29 @@ public class AppointmentRequestController {
 	    final AppointmentRequestStatus status = appointmentRequestStatusService.findBySysname("unhandled");
 
 	    final AppointmentRequest appointmentRequest = new AppointmentRequest(
-			    null, dto.getAppointmentPlace(), clinic, clinicService, veterinarian, userPet, user, status
+			    null, dto.getAppointmentPlace(), dto.getDate(), clinic,
+			    clinicService, veterinarian, userPet, user, status
 	    );
 
 	    return ResponseEntity.ok(appointmentRequestService.createOrUpdate(appointmentRequest));
     }
 
 	@GetMapping("/user/{userId}/appointments")
-	public ResponseEntity<List<AppointmentRequestDto>> findAll(@PathVariable final Long userId) {
+	public ResponseEntity<Page<UserAppointmentRequestDto>> findAll(
+			@PathVariable final Long userId,
+			@PageableDefault(sort = { "date" }, direction = Sort.Direction.DESC) final Pageable pageable
+	) {
 
-		final List<AppointmentRequestDto> appointmentRequests = appointmentRequestService
-				.findAllByUserId(userId)
-				.stream().map(req -> new AppointmentRequestDto(
-						req.getId(), req.getClinic().getName(), req.getVeterinarian().getSNP(),
-						req.getAppointmentPlace(), req.getPet().getName(), req.getService().getName()
-				))
-				.collect(Collectors.toList());
+		final Page<UserAppointmentRequestDto> appointmentRequests = appointmentRequestService
+				.findAllByUserId(userId, pageable)
+				.map(req -> new UserAppointmentRequestDto(
+						req.getId(), req.getClinic().getName(), req.getVeterinarian().getName(),
+						req.getAppointmentPlace(), req.getService().getName(), req.getStatus().getName(),
+						req.getDate()
+				));
 
 		return ResponseEntity.ok(appointmentRequests);
-    }
+	}
 
     @DeleteMapping("/appointments/{id}/remove")
     public ResponseEntity<Void> remove(@PathVariable final Long id) {

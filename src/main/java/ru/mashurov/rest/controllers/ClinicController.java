@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Service;
+import ru.mashurov.rest.model.Veterinarian;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.ServiceService;
-
-import java.util.List;
+import ru.mashurov.rest.services.VeterinarianService;
 
 @Slf4j
 @RestController
@@ -29,12 +29,17 @@ public class ClinicController {
 
 	private final ServiceService serviceService;
 
+	private final VeterinarianService veterinarianService;
+
 	@GetMapping("/clinics")
-	public ResponseEntity<List<Clinic>> findAllByRegion(@RequestParam("region") final Long region) {
-		return ResponseEntity.ok(clinicService.findAllByRegionCode(region));
+	public ResponseEntity<Page<Clinic>> findAllByRegion(
+			@RequestParam("region") final Long region,
+			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) final Pageable pageable
+	) {
+		return ResponseEntity.ok(clinicService.findAllByRegionCode(region, pageable));
 	}
 
-	@GetMapping("/clinics/{id}/get")
+	@GetMapping("/clinics/{id}")
 	public ResponseEntity<Clinic> findById(@PathVariable final Long id) {
 		return ResponseEntity.ok(clinicService.findById(id));
 	}
@@ -45,5 +50,13 @@ public class ClinicController {
 			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) final Pageable pageable
 	) {
 		return ResponseEntity.ok(serviceService.findAllByClinicId(id, pageable));
+	}
+
+	@GetMapping("/clinics/{id}/veterinarians")
+	public ResponseEntity<Page<Veterinarian>> findVeterinarians(
+			@PathVariable final Long id,
+			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) final Pageable pageable
+	) {
+		return ResponseEntity.ok(veterinarianService.findAllByClinicId(id, pageable));
 	}
 }

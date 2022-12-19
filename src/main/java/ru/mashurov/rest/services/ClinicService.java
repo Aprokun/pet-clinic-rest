@@ -1,12 +1,11 @@
 package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.repositories.ClinicRepo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ru.mashurov.rest.utils.ErrorMessages.CLINIC_NOT_EXIST;
 
@@ -21,8 +20,8 @@ public class ClinicService {
         return clinicRepo.existsById(id);
     }
 
-    public List<Clinic> findAllByRegionCode(final Long regionCode) {
-        return new ArrayList<>(clinicRepo.findAllByRegionCode(regionCode));
+    public Page<Clinic> findAllByRegionCode(final Long regionCode, final Pageable pageable) {
+        return clinicRepo.findAllByRegionCode(regionCode, pageable);
     }
 
     public Clinic findById(final Long id) {

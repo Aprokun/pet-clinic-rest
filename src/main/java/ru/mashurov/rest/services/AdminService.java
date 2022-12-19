@@ -1,9 +1,13 @@
 package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.Admin;
+import ru.mashurov.rest.model.Role;
 import ru.mashurov.rest.repositories.AdminRepo;
+import ru.mashurov.rest.repositories.RoleRepo;
 
 import java.util.Optional;
 
@@ -12,6 +16,8 @@ import java.util.Optional;
 public class AdminService {
 
 	private final AdminRepo adminRepo;
+
+	private final RoleRepo roleRepo;
 
 	public Admin findByLogin(final String login) {
 
@@ -33,5 +39,24 @@ public class AdminService {
 		} else {
 			throw new RuntimeException("Админ с id=" + id + " не найден");
 		}
+	}
+
+	public void save(final Admin admin) {
+		adminRepo.save(admin);
+	}
+
+	public Page<Admin> findAllMajors(final Pageable pageable) {
+
+		final Optional<Role> majorRole = roleRepo.findByNameIs("ROLE_MAJOR");
+
+		if (majorRole.isPresent()) {
+			return adminRepo.findAllByRolesContains(majorRole.get(), pageable);
+		} else {
+			throw new RuntimeException("Роли не существует");
+		}
+	}
+
+	public void removeMajor(final Long majorId) {
+		adminRepo.deleteById(majorId);
 	}
 }

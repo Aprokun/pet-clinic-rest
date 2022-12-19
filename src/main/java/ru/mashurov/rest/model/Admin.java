@@ -1,5 +1,6 @@
 package ru.mashurov.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -53,6 +54,7 @@ public class Admin {
 			joinColumns = @JoinColumn(name = "admin_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id")
 	)
+	@JsonManagedReference
 	private Set<Role> roles;
 
 	@Override

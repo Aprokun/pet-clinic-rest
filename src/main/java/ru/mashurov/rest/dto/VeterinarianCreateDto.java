@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppointmentRequestAdminDto {
+public class VeterinarianCreateDto {
 
-	private Long id;
+	private String surname;
 
-	private String veterinarianName;
+	private String name;
 
-	private String appointmentPlace;
+	private String patronymic;
 
-	private String petName;
+	private Integer experience;
 
-	private String serviceName;
+	private Long clinicId;
 }

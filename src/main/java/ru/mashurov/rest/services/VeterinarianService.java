@@ -1,12 +1,11 @@
 package ru.mashurov.rest.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.Veterinarian;
 import ru.mashurov.rest.repositories.VeterinarianRepo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static ru.mashurov.rest.utils.ErrorMessages.VETERINARIAN_NOT_EXIST;
 
@@ -16,20 +15,26 @@ public class VeterinarianService {
 
     private final VeterinarianRepo veterinarianRepo;
 
-    private final ClinicService clinicService;
+	public Veterinarian findById(final Long id) {
 
-    public List<Veterinarian> findAllByClinicId(final Long clinicId) {
-        return new ArrayList<>(veterinarianRepo.findAllByClinicId(clinicId));
-    }
+		if (!veterinarianRepo.existsById(id)) {
 
-    public Veterinarian findById(final Long id) {
+			//TODO 404
+			throw new RuntimeException(VETERINARIAN_NOT_EXIST);
+		}
 
-        if (!veterinarianRepo.existsById(id)) {
+		return veterinarianRepo.findById(id).get();
+	}
 
-            //TODO 404
-            throw new RuntimeException(VETERINARIAN_NOT_EXIST);
-        }
+	public Page<Veterinarian> findAllByClinicId(final Long clinicId, final Pageable pageable) {
+		return veterinarianRepo.findAllByClinicId(clinicId, pageable);
+	}
 
-        return veterinarianRepo.findById(id).get();
-    }
+	public void save(final Veterinarian veterinarian) {
+		veterinarianRepo.save(veterinarian);
+	}
+
+	public void deleteById(final Long id) {
+		veterinarianRepo.deleteById(id);
+	}
 }

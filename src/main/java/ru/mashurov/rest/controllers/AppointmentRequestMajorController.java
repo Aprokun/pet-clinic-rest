@@ -44,7 +44,7 @@ public class AppointmentRequestMajorController {
 	public ResponseEntity<Page<MajorAppointmentRequestDto>> findAll(
 			@PathVariable final Long majorId,
 			@RequestParam final List<String> statuses,
-			@PageableDefault(sort = { "id" }, direction = Sort.Direction.DESC) final Pageable pageable
+			@PageableDefault(sort = { "date" }, direction = Sort.Direction.DESC) final Pageable pageable
 	) {
 
 		final Admin admin = adminService.findById(majorId);

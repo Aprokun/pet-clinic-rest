@@ -16,7 +16,6 @@ public class ClinicService {
     private final ClinicRepo clinicRepo;
 
     public boolean existById(final Long id) {
-
         return clinicRepo.existsById(id);
     }
 
@@ -27,11 +26,18 @@ public class ClinicService {
     public Clinic findById(final Long id) {
 
         if (!existById(id)) {
-
             //TODO 404
             throw new RuntimeException(CLINIC_NOT_EXIST);
         }
 
         return clinicRepo.findById(id).get();
+    }
+
+    public void save(final Clinic clinic) {
+        clinicRepo.save(clinic);
+    }
+
+    public void deleteById(final Long id) {
+        clinicRepo.deleteById(id);
     }
 }

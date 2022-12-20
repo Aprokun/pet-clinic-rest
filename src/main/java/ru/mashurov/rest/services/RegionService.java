@@ -7,6 +7,7 @@ import ru.mashurov.rest.repositories.RegionRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,4 +23,14 @@ public class RegionService {
         return result;
     }
 
+    public Region findById(final Long code) {
+
+        final Optional<Region> optionalRegion = regionRepo.findById(code);
+
+        if (optionalRegion.isPresent()) {
+            return optionalRegion.get();
+        } else {
+            throw new RuntimeException("Нет региона с таким кодом - " + code);
+        }
+    }
 }

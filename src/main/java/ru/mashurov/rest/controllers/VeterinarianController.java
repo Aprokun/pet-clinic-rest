@@ -3,14 +3,22 @@ package ru.mashurov.rest.controllers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.mashurov.rest.dto.VeterinarianCreateDto;
+import ru.mashurov.rest.dto.VeterinarianUpdateDto;
+import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Veterinarian;
+import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 
-import java.util.List;
+import java.util.HashSet;
 
 @Slf4j
 @RestController
@@ -20,10 +28,48 @@ public class VeterinarianController {
 
 	private final VeterinarianService veterinarianService;
 
-	@GetMapping("/veterinarians")
-	public ResponseEntity<List<Veterinarian>> findAllByClinicId(
-			@RequestParam final Long clinic
-	) {
-		return ResponseEntity.ok(veterinarianService.findAllByClinicId(clinic));
+	private final ClinicService clinicService;
+
+	@DeleteMapping("/veterinarians/{id}")
+	public ResponseEntity<Void> deleteById(@PathVariable final Long id) {
+
+		veterinarianService.deleteById(id);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/veterinarians/{id}")
+	public ResponseEntity<Veterinarian> findById(@PathVariable final Long id) {
+		return ResponseEntity.ok(veterinarianService.findById(id));
+	}
+
+	@PatchMapping("/veterinarians/update")
+	public ResponseEntity<Void> update(@RequestBody final VeterinarianUpdateDto updateDto) {
+
+		final Veterinarian oldData = veterinarianService.findById(updateDto.getId());
+
+		final Veterinarian veterinarian = new Veterinarian(
+				oldData.getId(), updateDto.getSurname(), updateDto.getName(), updateDto.getPatronymic(),
+				updateDto.getExperience(), oldData.getClinic(), oldData.getAppointments()
+		);
+
+		veterinarianService.save(veterinarian);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/veterinarians/create")
+	public ResponseEntity<Void> create(@RequestBody final VeterinarianCreateDto createDto) {
+
+		final Clinic clinic = clinicService.findById(createDto.getClinicId());
+
+		final Veterinarian veterinarian = new Veterinarian(
+				null, createDto.getSurname(), createDto.getName(), createDto.getPatronymic(), createDto.getExperience(),
+				clinic, new HashSet<>()
+		);
+
+		veterinarianService.save(veterinarian);
+
+		return ResponseEntity.ok().build();
 	}
 }

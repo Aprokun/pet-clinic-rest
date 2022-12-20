@@ -204,4 +204,64 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="2022-11-30-19-50-00-add-admins-table" author="Dmitriy">
+        <createTable tableName="admins">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="login" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="clinic" type="bigint">
+                <constraints nullable="false" references="clinic(id)" foreignKeyName="major_clinic_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <insert tableName="roles">
+            <column name="id" value="1"/>
+            <column name="name" value="ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="id" value="2"/>
+            <column name="name" value="MAJOR"/>
+        </insert>
+        <createTable tableName="admins_roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="admin_id" type="bigint">
+                <constraints nullable="false" references="admins(id)" foreignKeyName="admins_roles_admin_fk"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false" references="roles(id)" foreignKeyName="admins_roles_role_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2022-12-10-15-00-00-update-role-names" author="Dmitriy">
+        <update tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+            <where>name='ADMIN'</where>
+        </update>
+        <update tableName="roles">
+            <column name="name" value="ROLE_MAJOR"/>
+            <where>name='MAJOR'</where>
+        </update>
+    </changeSet>
+    <changeSet id="2022-12-18-01-50-00-add-appoinment-request-date" author="Dmitriy">
+        <addColumn tableName="appointment_request">
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

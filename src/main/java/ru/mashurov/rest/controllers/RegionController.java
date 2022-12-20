@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.model.Region;
 import ru.mashurov.rest.services.RegionService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,7 +24,8 @@ public class RegionController {
     public ResponseEntity<List<Region>> findRegions() {
 
         final List<Region> regions = regionService.findAll();
-        return ResponseEntity.ok(new ArrayList<>(regions));
+
+        return ResponseEntity.ok(regions);
     }
 
     @GetMapping("/region")

@@ -31,6 +31,9 @@ import ru.mashurov.rest.utils.CheckHelper;
 
 import java.util.Objects;
 
+import static ru.mashurov.rest.values.AppointmentRequestStatusValues.CANCELED;
+import static ru.mashurov.rest.values.AppointmentRequestStatusValues.UNHANDLED;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -76,28 +79,45 @@ public class AppointmentRequestController {
 	    return ResponseEntity.ok(appointmentRequestService.createOrUpdate(appointmentRequest));
     }
 
-	@GetMapping("/user/{userId}/appointments")
+	@GetMapping("/user/{userId}/appointment-requests")
 	public ResponseEntity<Page<UserAppointmentRequestDto>> findAll(
 			@PathVariable final Long userId,
 			@PageableDefault(sort = { "date" }, direction = Sort.Direction.DESC) final Pageable pageable
 	) {
 
+		final AppointmentRequestStatus unhandled = appointmentRequestStatusService.findBySysname(UNHANDLED);
+
 		final Page<UserAppointmentRequestDto> appointmentRequests = appointmentRequestService
-				.findAllByUserId(userId, pageable)
+				.findAllByUserIdAndStatus(userId, unhandled, pageable)
 				.map(req -> new UserAppointmentRequestDto(
-						req.getId(), req.getClinic().getName(), req.getVeterinarian().getName(),
-						req.getAppointmentPlace(), req.getService().getName(), req.getStatus().getName(),
-						req.getDate()
+						req.getId(), req.getClinic().getName(), req.getClinic().getAddress(),
+						req.getVeterinarian().getSNP(), req.getAppointmentPlace(), req.getService().getName(),
+						req.getStatus().getName(), req.getPet().getName(), req.getDate().toString()
 				));
 
 		return ResponseEntity.ok(appointmentRequests);
 	}
 
-    @DeleteMapping("/appointments/{id}/remove")
-    public ResponseEntity<Void> remove(@PathVariable final Long id) {
+	@DeleteMapping("/appointments/{id}/remove")
+	public ResponseEntity<Void> remove(@PathVariable final Long id) {
 
-        appointmentRequestService.remove(id);
+		appointmentRequestService.remove(id);
 
-        return ResponseEntity.noContent().build();
-    }
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/user/{userId}/appointment-request/{reqId}/cancel")
+	public ResponseEntity<Void> cancelRequest(
+			@PathVariable final Long userId, @PathVariable final Long reqId
+	) {
+
+		final AppointmentRequest appointmentRequest = appointmentRequestService.findById(reqId);
+		final AppointmentRequestStatus canceled = appointmentRequestStatusService.findBySysname(CANCELED);
+
+		appointmentRequest.setStatus(canceled);
+
+		appointmentRequestService.save(appointmentRequest);
+
+		return ResponseEntity.ok().build();
+	}
 }

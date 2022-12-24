@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.AppointmentRequest;
+import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
 import java.time.LocalDateTime;
@@ -21,8 +22,10 @@ public class AppointmentRequestService {
 		return appointmentRequestRepo.save(appointmentRequest);
 	}
 
-	public Page<AppointmentRequest> findAllByUserId(final Long userId, final Pageable pageable) {
-		return appointmentRequestRepo.findAllByUserId(userId, pageable);
+	public Page<AppointmentRequest> findAllByUserIdAndStatus(
+			final Long userId, final AppointmentRequestStatus status, final Pageable pageable
+	) {
+		return appointmentRequestRepo.findAllByUserIdAndStatus(userId, status, pageable);
 	}
 
 	public void remove(final Long id) {
@@ -55,5 +58,9 @@ public class AppointmentRequestService {
 	) {
 
 		return appointmentRequestRepo.findAllByStatusSysnameInAndClinicId(statusSysnames, clinicId, pageable);
+	}
+
+	public void save(final AppointmentRequest appointmentRequest) {
+		appointmentRequestRepo.save(appointmentRequest);
 	}
 }

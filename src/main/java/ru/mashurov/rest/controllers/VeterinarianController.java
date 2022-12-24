@@ -15,6 +15,7 @@ import ru.mashurov.rest.dto.VeterinarianCreateDto;
 import ru.mashurov.rest.dto.VeterinarianUpdateDto;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Veterinarian;
+import ru.mashurov.rest.model.VeterinarianTimetable;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 
@@ -50,7 +51,7 @@ public class VeterinarianController {
 
 		final Veterinarian veterinarian = new Veterinarian(
 				oldData.getId(), updateDto.getSurname(), updateDto.getName(), updateDto.getPatronymic(),
-				updateDto.getExperience(), oldData.getClinic(), oldData.getAppointments()
+				updateDto.getExperience(), oldData.getClinic(), oldData.getAppointments(), oldData.getTimetable()
 		);
 
 		veterinarianService.save(veterinarian);
@@ -65,7 +66,7 @@ public class VeterinarianController {
 
 		final Veterinarian veterinarian = new Veterinarian(
 				null, createDto.getSurname(), createDto.getName(), createDto.getPatronymic(), createDto.getExperience(),
-				clinic, new HashSet<>()
+				clinic, new HashSet<>(), new VeterinarianTimetable()
 		);
 
 		veterinarianService.save(veterinarian);

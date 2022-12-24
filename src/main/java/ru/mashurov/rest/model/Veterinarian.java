@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Objects;
 import java.util.Set;
@@ -57,6 +58,9 @@ public class Veterinarian {
     @JsonManagedReference("veterinarian-value")
     @ToString.Exclude
     private Set<Appointment> appointments;
+
+    @OneToOne(mappedBy = "veterinarian")
+    private VeterinarianTimetable timetable;
 
     @Override
     public boolean equals(Object o) {

@@ -21,7 +21,7 @@ public class RegionController {
     private final RegionService regionService;
 
     @GetMapping("/regions")
-    public ResponseEntity<List<Region>> findRegions() {
+    public ResponseEntity<List<Region>> findAll() {
 
         final List<Region> regions = regionService.findAll();
 
@@ -29,7 +29,7 @@ public class RegionController {
     }
 
     @GetMapping("/region")
-    public ResponseEntity<Region> findRegion(@RequestParam final Long code) {
+    public ResponseEntity<Region> findByCode(@RequestParam final Long code) {
         return ResponseEntity.ok(regionService.findById(code));
     }
 }

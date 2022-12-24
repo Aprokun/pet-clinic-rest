@@ -34,7 +34,9 @@ public class ServiceController {
 
 		final Service service = serviceService.findById(id);
 
-		return ResponseEntity.ok(new ServiceDto(service.getName(), service.getDescription(), service.getCost()));
+		return ResponseEntity.ok(
+				new ServiceDto(service.getId(), service.getName(), service.getDescription(), service.getCost())
+		);
 	}
 
 	@DeleteMapping("/services/{id}")

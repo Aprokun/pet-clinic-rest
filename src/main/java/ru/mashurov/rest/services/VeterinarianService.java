@@ -18,8 +18,6 @@ public class VeterinarianService {
 	public Veterinarian findById(final Long id) {
 
 		if (!veterinarianRepo.existsById(id)) {
-
-			//TODO 404
 			throw new RuntimeException(VETERINARIAN_NOT_EXIST);
 		}
 

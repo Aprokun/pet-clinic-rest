@@ -4,18 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.mashurov.rest.model.Timetable;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceDto {
+public class VeterinarianTimetableCreateDto {
 
 	private Long id;
 
-	private String name;
+	private Long veterinarianId;
 
-	private String description;
-
-	private Integer cost;
+	private Timetable timetable;
 }

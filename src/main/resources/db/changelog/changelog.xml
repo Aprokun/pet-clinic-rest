@@ -15,10 +15,10 @@
         </createTable>
         <createTable tableName="user">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(100)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="region" type="bigint">
                 <constraints references="region(code)" nullable="false" foreignKeyName="user_region_fk"/>
@@ -26,13 +26,13 @@
         </createTable>
         <createTable tableName="pet">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="age" type="int">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="user_id" type="bigint">
                 <constraints references="user(id)" nullable="false" foreignKeyName="pet_user_fk"/>
@@ -40,21 +40,21 @@
         </createTable>
         <createTable tableName="clinic">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="address" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
         </createTable>
         <createTable tableName="veterinarian">
             <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="surname" type="varchar(50)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
@@ -263,5 +263,19 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+    </changeSet>
+    <changeSet id="2022-12-21-23-20-00-add-timetables-for-veterinarians" author="Dmitriy">
+        <createTable tableName="veterinarian_timetables">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="timetable" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="veterinarian_id" type="bigint">
+                <constraints nullable="false" references="veterinarian(id)"
+                             foreignKeyName="veterinarian_timetables_veterinarian_fk"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

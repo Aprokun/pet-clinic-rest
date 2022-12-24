@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.AppointmentRequest;
+import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +22,10 @@ public class AppointmentRequestService {
 		return appointmentRequestRepo.save(appointmentRequest);
 	}
 
-	public Page<AppointmentRequest> findAllByUserId(final Long userId, final Pageable pageable) {
-		return appointmentRequestRepo.findAllByUserId(userId, pageable);
+	public Page<AppointmentRequest> findAllByUserIdAndStatus(
+			final Long userId, final AppointmentRequestStatus status, final Pageable pageable
+	) {
+		return appointmentRequestRepo.findAllByUserIdAndStatus(userId, status, pageable);
 	}
 
 	public void remove(final Long id) {
@@ -30,6 +34,12 @@ public class AppointmentRequestService {
 
 	public Page<AppointmentRequest> findAllByClinicId(final Long clinicId, final Pageable pageable) {
 		return appointmentRequestRepo.findAllByClinicId(clinicId, pageable);
+	}
+
+	public List<AppointmentRequest> findAllByVeterinarianIdAndDateBetween(
+			final Long veterinarianId, final LocalDateTime begin, final LocalDateTime end
+	) {
+		return appointmentRequestRepo.findAllByVeterinarianIdAndDateBetween(veterinarianId, begin, end);
 	}
 
 	public AppointmentRequest findById(final Long requestId) {
@@ -48,5 +58,9 @@ public class AppointmentRequestService {
 	) {
 
 		return appointmentRequestRepo.findAllByStatusSysnameInAndClinicId(statusSysnames, clinicId, pageable);
+	}
+
+	public void save(final AppointmentRequest appointmentRequest) {
+		appointmentRequestRepo.save(appointmentRequest);
 	}
 }

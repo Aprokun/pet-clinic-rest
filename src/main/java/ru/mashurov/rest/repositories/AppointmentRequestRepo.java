@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.mashurov.rest.model.AppointmentRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,5 +20,9 @@ public interface AppointmentRequestRepo extends CrudRepository<AppointmentReques
 
 	Page<AppointmentRequest> findAllByStatusSysnameInAndClinicId(
 			final List<String> statusSysnames, final Long clinicId, final Pageable pageable
+	);
+
+	List<AppointmentRequest> findAllByVeterinarianIdAndDateBetween(
+			final Long veterinarianId, final LocalDateTime begin, final LocalDateTime end
 	);
 }

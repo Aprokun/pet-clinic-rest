@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.mashurov.rest.model.AppointmentRequest;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,12 @@ public class AppointmentRequestService {
 
 	public Page<AppointmentRequest> findAllByClinicId(final Long clinicId, final Pageable pageable) {
 		return appointmentRequestRepo.findAllByClinicId(clinicId, pageable);
+	}
+
+	public List<AppointmentRequest> findAllByVeterinarianIdAndDateBetween(
+			final Long veterinarianId, final LocalDateTime begin, final LocalDateTime end
+	) {
+		return appointmentRequestRepo.findAllByVeterinarianIdAndDateBetween(veterinarianId, begin, end);
 	}
 
 	public AppointmentRequest findById(final Long requestId) {

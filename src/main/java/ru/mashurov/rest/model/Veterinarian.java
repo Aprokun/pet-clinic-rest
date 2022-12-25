@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,7 +60,7 @@ public class Veterinarian {
     @ToString.Exclude
     private Set<Appointment> appointments;
 
-    @OneToOne(mappedBy = "veterinarian")
+    @OneToOne(mappedBy = "veterinarian", cascade = CascadeType.ALL)
     private VeterinarianTimetable timetable;
 
     @Override

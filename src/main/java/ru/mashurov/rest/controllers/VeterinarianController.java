@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.VeterinarianCreateDto;
 import ru.mashurov.rest.dto.VeterinarianUpdateDto;
 import ru.mashurov.rest.model.Clinic;
+import ru.mashurov.rest.model.Timetable;
 import ru.mashurov.rest.model.Veterinarian;
 import ru.mashurov.rest.model.VeterinarianTimetable;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
+import ru.mashurov.rest.services.VeterinarianTimetableService;
 
 import java.util.HashSet;
 
@@ -28,6 +30,8 @@ import java.util.HashSet;
 public class VeterinarianController {
 
 	private final VeterinarianService veterinarianService;
+
+	private final VeterinarianTimetableService veterinarianTimetableService;
 
 	private final ClinicService clinicService;
 
@@ -66,10 +70,16 @@ public class VeterinarianController {
 
 		final Veterinarian veterinarian = new Veterinarian(
 				null, createDto.getSurname(), createDto.getName(), createDto.getPatronymic(), createDto.getExperience(),
-				clinic, new HashSet<>(), new VeterinarianTimetable()
+				clinic, new HashSet<>(), null
 		);
 
 		veterinarianService.save(veterinarian);
+
+		final VeterinarianTimetable veterinarianTimetable = new VeterinarianTimetable(
+				null, new Timetable(), veterinarian
+		);
+
+		veterinarianTimetableService.save(veterinarianTimetable);
 
 		return ResponseEntity.ok().build();
 	}

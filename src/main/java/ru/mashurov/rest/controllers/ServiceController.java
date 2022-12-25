@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.mashurov.rest.dto.ServiceCreateDto;
 import ru.mashurov.rest.dto.ServiceDto;
-import ru.mashurov.rest.dto.ServiceUpdateDto;
 import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Service;
 import ru.mashurov.rest.services.ClinicService;
@@ -62,7 +61,7 @@ public class ServiceController {
 	}
 
 	@PatchMapping("/services/update")
-	public ResponseEntity<Void> update(@RequestBody final ServiceUpdateDto updateDto) {
+	public ResponseEntity<Void> update(@RequestBody final ServiceDto updateDto) {
 
 		final Service service = serviceService.findById(updateDto.getId());
 

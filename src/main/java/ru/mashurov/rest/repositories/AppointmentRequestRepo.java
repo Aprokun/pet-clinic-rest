@@ -13,8 +13,8 @@ import java.util.List;
 @Repository
 public interface AppointmentRequestRepo extends CrudRepository<AppointmentRequest, Long> {
 
-	Page<AppointmentRequest> findAllByUserIdAndStatus(
-			final Long userId, final AppointmentRequestStatus status, final Pageable pageable
+	Page<AppointmentRequest> findAllByUserIdAndStatusIn(
+			final Long userId, final List<AppointmentRequestStatus> status, final Pageable pageable
 	);
 
 	Page<AppointmentRequest> findAllByVeterinarianId(final Long veterinarianId, final Pageable pageable);

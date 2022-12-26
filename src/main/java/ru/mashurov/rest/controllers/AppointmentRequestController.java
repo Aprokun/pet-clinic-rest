@@ -29,9 +29,12 @@ import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.VeterinarianService;
 import ru.mashurov.rest.utils.CheckHelper;
 
+import java.util.List;
 import java.util.Objects;
 
+import static ru.mashurov.rest.values.AppointmentRequestStatusValues.ACCEPT;
 import static ru.mashurov.rest.values.AppointmentRequestStatusValues.CANCELED;
+import static ru.mashurov.rest.values.AppointmentRequestStatusValues.REJECTED;
 import static ru.mashurov.rest.values.AppointmentRequestStatusValues.UNHANDLED;
 
 @Slf4j
@@ -86,9 +89,14 @@ public class AppointmentRequestController {
 	) {
 
 		final AppointmentRequestStatus unhandled = appointmentRequestStatusService.findBySysname(UNHANDLED);
+		final AppointmentRequestStatus accept = appointmentRequestStatusService.findBySysname(ACCEPT);
+		final AppointmentRequestStatus rejected = appointmentRequestStatusService.findBySysname(REJECTED);
+
+
+		final List<AppointmentRequestStatus> statuses = List.of(unhandled, accept, rejected);
 
 		final Page<UserAppointmentRequestDto> appointmentRequests = appointmentRequestService
-				.findAllByUserIdAndStatus(userId, unhandled, pageable)
+				.findAllByUserIdAndStatus(userId, statuses, pageable)
 				.map(req -> new UserAppointmentRequestDto(
 						req.getId(), req.getClinic().getName(), req.getClinic().getAddress(),
 						req.getVeterinarian().getSNP(), req.getAppointmentPlace(), req.getService().getName(),

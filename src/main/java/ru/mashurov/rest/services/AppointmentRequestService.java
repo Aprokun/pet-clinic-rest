@@ -23,9 +23,9 @@ public class AppointmentRequestService {
 	}
 
 	public Page<AppointmentRequest> findAllByUserIdAndStatus(
-			final Long userId, final AppointmentRequestStatus status, final Pageable pageable
+			final Long userId, final List<AppointmentRequestStatus> statuses, final Pageable pageable
 	) {
-		return appointmentRequestRepo.findAllByUserIdAndStatus(userId, status, pageable);
+		return appointmentRequestRepo.findAllByUserIdAndStatusIn(userId, statuses, pageable);
 	}
 
 	public void remove(final Long id) {

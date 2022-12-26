@@ -74,10 +74,6 @@ public class VeterinarianTimetableController {
 		final List<AppointmentRequest> appointmentRequest
 				= appointmentRequestService.findAllByVeterinarianIdAndDateBetween(id, begin, end);
 
-		if (timePeriods == null) {
-			throw new RuntimeException("Нет расписания на эту дату");
-		}
-
 		final List<TimePeriod> allowTimePeriods = getAllowAppointmentTimePeriods(timePeriods, appointmentRequest);
 
 		return ResponseEntity.ok(allowTimePeriods);

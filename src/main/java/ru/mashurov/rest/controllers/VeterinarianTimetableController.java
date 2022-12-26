@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Collections.emptyList;
 
 @Slf4j
 @RestController
@@ -74,9 +75,13 @@ public class VeterinarianTimetableController {
 		final List<AppointmentRequest> appointmentRequest
 				= appointmentRequestService.findAllByVeterinarianIdAndDateBetween(id, begin, end);
 
-		final List<TimePeriod> allowTimePeriods = getAllowAppointmentTimePeriods(timePeriods, appointmentRequest);
+		if (timePeriods != null && !timePeriods.isEmpty()) {
+			final List<TimePeriod> allowTimePeriods = getAllowAppointmentTimePeriods(timePeriods, appointmentRequest);
 
-		return ResponseEntity.ok(allowTimePeriods);
+			return ResponseEntity.ok(allowTimePeriods);
+		}
+
+		return ResponseEntity.ok(emptyList());
 	}
 
 	private static List<TimePeriod> getAllowAppointmentTimePeriods(

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,10 @@ import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.services.AdminService;
 import ru.mashurov.rest.services.AppointmentRequestService;
 import ru.mashurov.rest.services.AppointmentRequestStatusService;
+import ru.mashurov.rest.services.PetService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -39,6 +43,8 @@ public class AppointmentRequestMajorController {
 	private final AppointmentRequestService appointmentRequestService;
 
 	private final AdminService adminService;
+
+	private final PetService petService;
 
 	@GetMapping("/{majorId}/appointments")
 	public ResponseEntity<Page<MajorAppointmentRequestDto>> findAll(
@@ -85,5 +91,43 @@ public class AppointmentRequestMajorController {
 		appointmentRequestService.createOrUpdate(appointmentRequest);
 
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/{majorId}/today-appointments")
+	public ResponseEntity<Page<MajorAppointmentRequestDto>> findTodayAppointmentRequests(
+			@PathVariable final Long majorId,
+			@PageableDefault(sort = { "date" }, direction = Sort.Direction.DESC) final Pageable pageable
+	) {
+
+		final Long clinicId = adminService.findById(majorId).getClinic().getId();
+
+		final List<String> statuses = List.of(ACCEPT);
+
+		final LocalDateTime beginToday = LocalDate.now().atStartOfDay();
+		final LocalDateTime endToday = LocalDate.now().atStartOfDay().plusHours(23L);
+
+		final Page<MajorAppointmentRequestDto> requests = appointmentRequestService
+				.findAllByStatusSysnameInAndClinicIdAndDateBetween(statuses, clinicId, beginToday, endToday, pageable)
+				.map(req -> new MajorAppointmentRequestDto(
+						req.getId(), req.getVeterinarian().getSNP(),
+						req.getAppointmentPlace().equals(CLINIC) ? "В клинике" : "На дому",
+						req.getPet().getName(), req.getService().getName(), req.getStatus().getName(),
+						req.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm"))
+				));
+
+		return ResponseEntity.ok(requests);
+	}
+
+	@PatchMapping("/requests/{requestId}/{statusSysname}")
+	public ResponseEntity<Void> setRequestStatus(@PathVariable final Long requestId, @PathVariable final String statusSysname) {
+
+		final AppointmentRequestStatus newStatus = appointmentRequestStatusService.findBySysname(statusSysname);
+		final AppointmentRequest request = appointmentRequestService.findById(requestId);
+
+		request.setStatus(newStatus);
+
+		appointmentRequestService.save(request);
+
+		return ResponseEntity.ok().build();
 	}
 }

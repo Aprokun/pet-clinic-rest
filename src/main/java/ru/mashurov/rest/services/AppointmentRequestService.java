@@ -9,6 +9,7 @@ import ru.mashurov.rest.model.AppointmentRequestStatus;
 import ru.mashurov.rest.repositories.AppointmentRequestRepo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class AppointmentRequestService {
 		return appointmentRequestRepo.save(appointmentRequest);
 	}
 
-	public Page<AppointmentRequest> findAllByUserIdAndStatus(
+	public Page<AppointmentRequest> findAllByUserIdAndStatusesIn(
 			final Long userId, final List<AppointmentRequestStatus> statuses, final Pageable pageable
 	) {
 		return appointmentRequestRepo.findAllByUserIdAndStatusIn(userId, statuses, pageable);
@@ -60,7 +61,22 @@ public class AppointmentRequestService {
 		return appointmentRequestRepo.findAllByStatusSysnameInAndClinicId(statusSysnames, clinicId, pageable);
 	}
 
+	public Page<AppointmentRequest> findAllByStatusSysnameInAndClinicIdAndDateBetween(
+			final List<String> statusSysnames, final Long clinicId, final LocalDateTime begin,
+			final LocalDateTime end, final Pageable pageable
+	) {
+		return appointmentRequestRepo.findAllByStatusSysnameInAndClinicIdAndDateBetween(
+				statusSysnames, clinicId, begin, end, pageable
+		);
+	}
+
 	public void save(final AppointmentRequest appointmentRequest) {
 		appointmentRequestRepo.save(appointmentRequest);
+	}
+
+	public List<AppointmentRequest> findAllByPetIdAndStatuses(
+			final Long petId, final List<AppointmentRequestStatus> statuses
+	) {
+		return new ArrayList<>(appointmentRequestRepo.findAllByPetIdAndStatusIn(petId, statuses));
 	}
 }

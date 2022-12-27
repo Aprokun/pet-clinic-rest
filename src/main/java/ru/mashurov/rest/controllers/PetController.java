@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.mashurov.rest.dto.PetUpdateDto;
 import ru.mashurov.rest.model.Pet;
 import ru.mashurov.rest.services.PetService;
 
@@ -29,6 +31,20 @@ public class PetController {
 	@GetMapping("/pets/{id}/get")
 	public ResponseEntity<Pet> find(@PathVariable final Long id) {
 		return ResponseEntity.ok(petService.findById(id));
+	}
+
+	@PutMapping("/pets/update")
+	public ResponseEntity<Void> update(@RequestBody final PetUpdateDto updateDto) {
+
+		final Pet pet = petService.findById(updateDto.getId());
+
+		pet.setName(updateDto.getName());
+		pet.setAge(updateDto.getAge());
+		pet.setGender(updateDto.getGender());
+
+		petService.save(pet);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/pets/{id}/delete")

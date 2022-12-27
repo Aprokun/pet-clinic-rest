@@ -1,5 +1,6 @@
 package ru.mashurov.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,7 @@ public class User {
     private Region region;
 
     @JsonManagedReference("pets-value")
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @OneToMany(mappedBy = "user", cascade = { CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Pet> pets;

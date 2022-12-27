@@ -62,7 +62,7 @@ public class Pet {
 			inverseJoinColumns = @JoinColumn(name = "pet_id")
 	)
 	@JsonManagedReference("appointments-value")
-	private Set<Appointment> appointments;
+	private Set<AppointmentRequest> appointments;
 
 	@Override
 	public boolean equals(Object o) {

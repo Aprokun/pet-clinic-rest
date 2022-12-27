@@ -1,6 +1,6 @@
 package ru.mashurov.rest.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,9 +56,9 @@ public class Veterinarian {
     private Clinic clinic;
 
     @OneToMany(mappedBy = "veterinarian", fetch = FetchType.LAZY)
-    @JsonManagedReference("veterinarian-value")
+    @JsonIgnore
     @ToString.Exclude
-    private Set<Appointment> appointments;
+    private Set<AppointmentRequest> appointments;
 
     @OneToOne(mappedBy = "veterinarian", cascade = CascadeType.ALL)
     private VeterinarianTimetable timetable;

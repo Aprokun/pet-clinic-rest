@@ -278,4 +278,24 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2022-12-27-19-30-00-add-new-statuses" author="Dmitriy">
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="visited"/>
+            <column name="name" value="Посещено"/>
+        </insert>
+        <insert tableName="appointment_request_statuses">
+            <column name="sysname" value="not_visited"/>
+            <column name="name" value="Не посещено"/>
+        </insert>
+    </changeSet>
+    <changeSet id="2022-12-27-20-20-00-drop-appointment-table" author="Dmitriy">
+        <dropColumn tableName="appointment_history" columnName="appointment_id"/>
+        <dropTable tableName="appointment"/>
+        <addColumn tableName="appointment_history">
+            <column name="appointment_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="appointment_history_appointment_fk"
+                             references="appointment_request(id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

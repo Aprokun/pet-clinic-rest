@@ -9,6 +9,7 @@ import ru.mashurov.rest.model.AppointmentRequestStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AppointmentRequestRepo extends CrudRepository<AppointmentRequest, Long> {
@@ -28,4 +29,11 @@ public interface AppointmentRequestRepo extends CrudRepository<AppointmentReques
 	List<AppointmentRequest> findAllByVeterinarianIdAndDateBetween(
 			final Long veterinarianId, final LocalDateTime begin, final LocalDateTime end
 	);
+
+	Page<AppointmentRequest> findAllByStatusSysnameInAndClinicIdAndDateBetween(
+			final List<String> statusSysnames, final Long clinicId, final LocalDateTime begin,
+			final LocalDateTime end, final Pageable pageable
+	);
+
+	Set<AppointmentRequest> findAllByPetIdAndStatusIn(final Long petId, final List<AppointmentRequestStatus> statuses);
 }

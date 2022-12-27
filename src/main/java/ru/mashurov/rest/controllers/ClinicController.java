@@ -22,7 +22,6 @@ import ru.mashurov.rest.model.Clinic;
 import ru.mashurov.rest.model.Region;
 import ru.mashurov.rest.model.Service;
 import ru.mashurov.rest.model.Veterinarian;
-import ru.mashurov.rest.repositories.RegionRepo;
 import ru.mashurov.rest.services.ClinicService;
 import ru.mashurov.rest.services.RegionService;
 import ru.mashurov.rest.services.ServiceService;
@@ -35,7 +34,6 @@ import java.util.HashSet;
 @AllArgsConstructor
 @RequestMapping("/api")
 public class ClinicController {
-	private final RegionRepo regionRepo;
 
 	private final ClinicService clinicService;
 

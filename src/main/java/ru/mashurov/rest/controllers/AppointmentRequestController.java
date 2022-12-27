@@ -96,7 +96,7 @@ public class AppointmentRequestController {
 		final List<AppointmentRequestStatus> statuses = List.of(unhandled, accept, rejected);
 
 		final Page<UserAppointmentRequestDto> appointmentRequests = appointmentRequestService
-				.findAllByUserIdAndStatus(userId, statuses, pageable)
+				.findAllByUserIdAndStatusesIn(userId, statuses, pageable)
 				.map(req -> new UserAppointmentRequestDto(
 						req.getId(), req.getClinic().getName(), req.getClinic().getAddress(),
 						req.getVeterinarian().getSNP(), req.getAppointmentPlace(), req.getService().getName(),
